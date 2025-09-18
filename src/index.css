@@ -1,42 +1,81 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
+/* Calm Meditation App Design System - Serene & Peaceful */
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    /* Core calm colors - peaceful blues and greens */
+    --background: 210 25% 98%;
+    --foreground: 215 25% 15%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card: 210 20% 99%;
+    --card-foreground: 215 25% 15%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover: 210 20% 99%;
+    --popover-foreground: 215 25% 15%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    /* Calming primary - deep ocean blue */
+    --primary: 210 60% 45%;
+    --primary-foreground: 210 25% 98%;
+    
+    /* Soft sage green secondary */
+    --secondary: 150 25% 85%;
+    --secondary-foreground: 150 30% 25%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    /* Gentle muted tones */
+    --muted: 210 15% 92%;
+    --muted-foreground: 215 15% 45%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    /* Peaceful accent - soft mint */
+    --accent: 165 35% 75%;
+    --accent-foreground: 165 40% 20%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --destructive: 0 65% 55%;
+    --destructive-foreground: 210 25% 98%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    --border: 210 15% 88%;
+    --input: 210 15% 88%;
+    --ring: 210 60% 45%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --radius: 1rem;
 
-    --radius: 0.5rem;
+    /* Calm-specific color palette */
+    --ocean: 210 60% 45%;
+    --ocean-light: 210 55% 75%;
+    --ocean-dark: 210 65% 25%;
+    
+    --sage: 150 25% 65%;
+    --sage-light: 150 20% 85%;
+    --sage-dark: 150 30% 35%;
+    
+    --mint: 165 35% 75%;
+    --mint-light: 165 30% 90%;
+    
+    --sunset: 25 85% 75%;
+    --sunset-light: 25 80% 85%;
+    
+    --lavender: 260 25% 80%;
+    --lavender-light: 260 20% 92%;
+
+    /* Gradients for peaceful backgrounds */
+    --gradient-ocean: linear-gradient(135deg, hsl(var(--ocean)), hsl(var(--ocean-light)));
+    --gradient-sage: linear-gradient(135deg, hsl(var(--sage)), hsl(var(--sage-light)));
+    --gradient-sunset: linear-gradient(135deg, hsl(var(--sunset)), hsl(var(--sunset-light)));
+    --gradient-calm: linear-gradient(135deg, hsl(var(--ocean-light)), hsl(var(--mint-light)));
+    --gradient-peaceful: linear-gradient(180deg, hsl(var(--background)), hsl(var(--sage-light)));
+
+    /* Shadows for depth and serenity */
+    --shadow-soft: 0 4px 20px -2px hsl(var(--ocean) / 0.1);
+    --shadow-medium: 0 8px 30px -4px hsl(var(--ocean) / 0.15);
+    --shadow-strong: 0 20px 40px -8px hsl(var(--ocean) / 0.2);
+
+    /* Transitions */
+    --transition-calm: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-gentle: all 0.3s ease-out;
 
     --sidebar-background: 0 0% 98%;
 
@@ -100,6 +139,97 @@ All colors MUST be HSL.
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-inter;
+    font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+  }
+}
+
+@layer components {
+  /* Calm-specific component styles */
+  .gradient-ocean {
+    background: var(--gradient-ocean);
+  }
+  
+  .gradient-sage {
+    background: var(--gradient-sage);
+  }
+  
+  .gradient-sunset {
+    background: var(--gradient-sunset);
+  }
+  
+  .gradient-calm {
+    background: var(--gradient-calm);
+  }
+  
+  .gradient-peaceful {
+    background: var(--gradient-peaceful);
+  }
+  
+  .shadow-soft {
+    box-shadow: var(--shadow-soft);
+  }
+  
+  .shadow-medium {
+    box-shadow: var(--shadow-medium);
+  }
+  
+  .shadow-strong {
+    box-shadow: var(--shadow-strong);
+  }
+  
+  .transition-calm {
+    transition: var(--transition-calm);
+  }
+  
+  .transition-gentle {
+    transition: var(--transition-gentle);
+  }
+
+  /* Meditation session cards */
+  .session-card {
+    @apply bg-card rounded-2xl p-6 shadow-soft transition-calm hover:shadow-medium hover:scale-[1.02];
+  }
+
+  /* Peaceful hover effects */
+  .hover-lift {
+    @apply transition-calm hover:shadow-medium hover:-translate-y-1;
+  }
+
+  /* Breathing animation */
+  .breathe {
+    animation: breathe 4s ease-in-out infinite;
+  }
+  
+  @keyframes breathe {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+  }
+
+  /* Floating animation for peaceful elements */
+  .float {
+    animation: float 6s ease-in-out infinite;
+  }
+  
+  @keyframes float {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    33% { transform: translateY(-10px) rotate(1deg); }
+    66% { transform: translateY(-5px) rotate(-1deg); }
+  }
+
+  /* Peaceful fade in animation */
+  .fade-in-peaceful {
+    animation: fadeInPeaceful 0.8s ease-out;
+  }
+  
+  @keyframes fadeInPeaceful {
+    from {
+      opacity: 0;
+      transform: translateY(20px) scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
   }
 }
