@@ -9,6 +9,7 @@ interface MeditationCardProps {
   image: string;
   description?: string;
   isLocked?: boolean;
+  onPlay?: () => void;
 }
 
 const MeditationCard = ({ 
@@ -17,7 +18,8 @@ const MeditationCard = ({
   category, 
   image, 
   description,
-  isLocked = false 
+  isLocked = false,
+  onPlay
 }: MeditationCardProps) => {
   return (
     <Card className="session-card group cursor-pointer overflow-hidden">
@@ -59,6 +61,7 @@ const MeditationCard = ({
             size="sm" 
             className="bg-ocean hover:bg-ocean-dark text-white shadow-none h-8 px-3"
             disabled={isLocked}
+            onClick={onPlay}
           >
             <Play className="h-3 w-3 mr-1" />
             {isLocked ? "Locked" : "Play"}

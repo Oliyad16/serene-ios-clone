@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import MeditationCard from "@/components/MeditationCard";
+import MeditationPlayer from "@/components/MeditationPlayer";
 import forestImage from "@/assets/forest-meditation.jpg";
 import mountainImage from "@/assets/mountain-sleep.jpg";
 import breathingImage from "@/assets/breathing-zen.jpg";
@@ -12,6 +13,19 @@ import breathingImage from "@/assets/breathing-zen.jpg";
 const Meditate = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
+  const [playerData, setPlayerData] = useState<{
+    title: string;
+    instructor: string;
+    duration: string;
+    image: string;
+    isVisible: boolean;
+  }>({
+    title: "",
+    instructor: "",
+    duration: "",
+    image: "",
+    isVisible: false
+  });
 
   const categories = ["All", "Anxiety", "Focus", "Sleep", "Breathe", "Mindfulness", "Body"];
   
@@ -36,44 +50,64 @@ const Meditate = () => {
       duration: "12 min",
       category: "Anxiety",
       image: forestImage,
-      description: "Let go of worry and embrace calm"
+      description: "Let go of worry and embrace calm",
+      instructor: "Sarah Chen"
     },
     {
       title: "Deep Breathing",
       duration: "8 min", 
       category: "Breathe",
       image: breathingImage,
-      description: "Find your natural rhythm"
+      description: "Find your natural rhythm",
+      instructor: "Mark Williams"
     },
     {
       title: "Mountain Meditation",
       duration: "20 min",
       category: "Focus",
       image: mountainImage,
-      description: "Build unshakeable inner strength"
+      description: "Build unshakeable inner strength",
+      instructor: "David Kim"
     },
     {
       title: "Body Scan",
       duration: "15 min",
       category: "Body",
       image: forestImage,
-      description: "Release physical tension mindfully"
+      description: "Release physical tension mindfully",
+      instructor: "Emma Johnson"
     },
     {
       title: "Loving Kindness",
       duration: "18 min",
       category: "Mindfulness", 
       image: mountainImage,
-      description: "Cultivate compassion for all beings"
+      description: "Cultivate compassion for all beings",
+      instructor: "Lisa Anderson"
     },
     {
       title: "Quick Focus",
       duration: "5 min",
       category: "Focus",
       image: breathingImage,
-      description: "Sharpen your concentration instantly"
+      description: "Sharpen your concentration instantly",
+      instructor: "Tom Parker"
     }
   ];
+
+  const handlePlayMeditation = (meditation: any) => {
+    setPlayerData({
+      title: meditation.title,
+      instructor: meditation.instructor,
+      duration: meditation.duration,
+      image: meditation.image,
+      isVisible: true
+    });
+  };
+
+  const handleClosePlayer = () => {
+    setPlayerData(prev => ({ ...prev, isVisible: false }));
+  };
 
   const filteredMeditations = meditations.filter(meditation => {
     const matchesSearch = meditation.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -135,7 +169,15 @@ const Meditate = () => {
                   <h3 className="text-xl font-semibold mb-1">{item.title}</h3>
                   <p className="text-white/80 text-sm mb-2">{item.subtitle}</p>
                   <p className="text-white/90 mb-4">{item.description}</p>
-                  <Button className="bg-white/20 hover:bg-white/30 text-white backdrop-blur-sm border-white/20 border">
+                  <Button 
+                    className="bg-white/20 hover:bg-white/30 text-white backdrop-blur-sm border-white/20 border"
+                    onClick={() => handlePlayMeditation({
+                      title: item.title,
+                      instructor: "Calm Team",
+                      duration: item.subtitle,
+                      image: item.title === "Daily Calm" ? forestImage : mountainImage
+                    })}
+                  >
                     <Play className="h-4 w-4 mr-2" />
                     Start
                   </Button>
@@ -166,6 +208,7 @@ const Meditate = () => {
                 category={meditation.category}
                 image={meditation.image}
                 description={meditation.description}
+                onPlay={() => handlePlayMeditation(meditation)}
               />
             ))}
           </div>
@@ -177,6 +220,15 @@ const Meditate = () => {
           )}
         </div>
       </div>
+      
+      <MeditationPlayer
+        title={playerData.title}
+        instructor={playerData.instructor}
+        duration={playerData.duration}
+        image={playerData.image}
+        isVisible={playerData.isVisible}
+        onClose={handleClosePlayer}
+      />
     </div>
   );
 };

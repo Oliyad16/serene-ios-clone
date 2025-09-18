@@ -74,11 +74,21 @@ const Breathe = () => {
     return () => clearInterval(interval);
   }, [isActive, currentPhase]);
 
+  const [selectedTechnique, setSelectedTechnique] = useState("4-7-8");
+
   const resetSession = () => {
     setIsActive(false);
     setCurrentPhase('inhale');
     setSeconds(0);
     setCycleCount(0);
+  };
+
+  const handleStart = () => {
+    setIsActive(!isActive);
+    if (!isActive) {
+      setCurrentPhase('inhale');
+      setSeconds(0);
+    }
   };
 
   const getPhaseInstruction = () => {
@@ -156,7 +166,7 @@ const Breathe = () => {
             {/* Controls */}
             <div className="flex justify-center gap-4">
               <Button
-                onClick={() => setIsActive(!isActive)}
+                onClick={handleStart}
                 className="bg-white/20 hover:bg-white/30 text-white backdrop-blur-sm border-white/20 border w-16 h-16 rounded-full p-0"
               >
                 {isActive ? <Pause className="h-6 w-6" /> : <Play className="h-6 w-6" />}
@@ -214,6 +224,10 @@ const Breathe = () => {
                       technique.color === 'sage' ? 'bg-sage hover:bg-sage-dark text-sage-dark' :
                       'bg-mint hover:bg-mint/80 text-mint-dark'
                     } text-white`}
+                    onClick={() => {
+                      setSelectedTechnique(technique.name.split(' ')[0]);
+                      handleStart();
+                    }}
                   >
                     <Play className="h-3 w-3 mr-1" />
                     Start

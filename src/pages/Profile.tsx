@@ -1,10 +1,18 @@
-import { Settings, Award, Calendar, TrendingUp, Heart, Target, Crown, Bell } from "lucide-react";
-import { Card } from "@/components/ui/card";
+import { useState } from "react";
+import { User, Settings, Crown, Calendar, Flame, Award, ChevronRight, Moon, Sun, Target, TrendingUp, Heart, Bell } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Switch } from "@/components/ui/switch";
+import { Progress } from "@/components/ui/progress";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useToast } from "@/hooks/use-toast";
 
 const Profile = () => {
+  const [darkMode, setDarkMode] = useState(false);
+  const [notifications, setNotifications] = useState(true);
+  const [weeklyGoal, setWeeklyGoal] = useState(5);
+  const { toast } = useToast();
   const stats = [
     {
       label: "Current Streak",
@@ -161,37 +169,69 @@ const Profile = () => {
           </div>
         </div>
 
-        {/* Preferences */}
-        <div className="mb-8">
-          <h2 className="text-lg font-semibold mb-4">Preferences</h2>
-          
-          <Card className="divide-y divide-border">
-            {preferences.map((pref, index) => (
-              <div key={index} className="p-4 flex items-center justify-between">
-                <span className="font-medium text-sm">{pref.label}</span>
-                <span className="text-sm text-muted-foreground">{pref.value}</span>
+          <div>
+            <h2 className="text-lg font-semibold mb-4">Settings</h2>
+            
+            <Card className="p-4 space-y-4">
+              <div className="flex items-center justify-between">
+                <span className="text-sm">Push Notifications</span>
+                <Switch 
+                  className="data-[state=checked]:bg-ocean" 
+                  checked={notifications}
+                  onCheckedChange={setNotifications}
+                />
               </div>
-            ))}
-          </Card>
-        </div>
+              <div className="flex items-center justify-between">
+                <span className="text-sm">Dark Mode</span>
+                <Switch 
+                  className="data-[state=checked]:bg-ocean" 
+                  checked={darkMode}
+                  onCheckedChange={setDarkMode}
+                />
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-sm">Weekly Goal</span>
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  className="text-ocean"
+                  onClick={() => {
+                    const newGoal = weeklyGoal === 7 ? 3 : weeklyGoal + 1;
+                    setWeeklyGoal(newGoal);
+                    toast({
+                      title: "Goal Updated",
+                      description: `Weekly goal set to ${newGoal} sessions`,
+                    });
+                  }}
+                >
+                  {weeklyGoal} sessions
+                  <ChevronRight className="h-4 w-4 ml-1" />
+                </Button>
+              </div>
+            </Card>
+          </div>
 
-        {/* Action Buttons */}
-        <div className="space-y-3">
-          <Button variant="outline" className="w-full justify-start">
-            <Bell className="h-4 w-4 mr-3" />
-            Notification Settings
-          </Button>
-          
-          <Button variant="outline" className="w-full justify-start">
-            <Crown className="h-4 w-4 mr-3" />
-            Upgrade to Calm Plus
-          </Button>
-          
-          <Button variant="outline" className="w-full justify-start">
-            <Settings className="h-4 w-4 mr-3" />
-            Account Settings
-          </Button>
-        </div>
+          {/* Upgrade Card */}
+          <Card className="p-6 bg-gradient-sunset text-white text-center overflow-hidden relative mb-8">
+            <div className="relative z-10">
+              <Crown className="h-8 w-8 mx-auto mb-3 text-yellow-300" />
+              <h3 className="text-lg font-semibold mb-2">Upgrade to Calm Plus</h3>
+              <p className="text-white/80 text-sm mb-4">
+                Unlock unlimited meditations, sleep stories, and masterclasses
+              </p>
+              <Button 
+                className="bg-white/20 hover:bg-white/30 text-white backdrop-blur-sm border-white/20 border"
+                onClick={() => toast({
+                  title: "Upgrade Available",
+                  description: "Calm Plus features coming soon!",
+                })}
+              >
+                Try Free for 7 Days
+              </Button>
+            </div>
+            <div className="absolute -top-4 -right-4 w-20 h-20 bg-white/10 rounded-full" />
+            <div className="absolute -bottom-8 -left-8 w-24 h-24 bg-white/5 rounded-full" />
+          </Card>
       </div>
     </div>
   );

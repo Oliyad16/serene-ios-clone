@@ -1,11 +1,35 @@
-import { Moon, Star, Volume2, Timer, Play } from "lucide-react";
+import { useState } from "react";
+import { Moon, Star, Volume2, Timer, Play, Pause } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Slider } from "@/components/ui/slider";
 import mountainImage from "@/assets/mountain-sleep.jpg";
 import forestImage from "@/assets/forest-meditation.jpg";
 
 const Sleep = () => {
+  const [selectedTimer, setSelectedTimer] = useState(30);
+  const [volume, setVolume] = useState([70]);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [currentStory, setCurrentStory] = useState<string | null>(null);
+  const handlePlayStory = (storyTitle: string) => {
+    if (currentStory === storyTitle) {
+      setIsPlaying(!isPlaying);
+    } else {
+      setCurrentStory(storyTitle);
+      setIsPlaying(true);
+    }
+  };
+
+  const handlePlaySound = (soundName: string) => {
+    if (currentStory === soundName) {
+      setIsPlaying(!isPlaying);
+    } else {
+      setCurrentStory(soundName);
+      setIsPlaying(true);
+    }
+  };
+
   const sleepStories = [
     {
       title: "The Enchanted Forest",
@@ -65,16 +89,33 @@ const Sleep = () => {
             <p className="text-white/80 mb-4">Choose how long you'd like to listen</p>
             
             <div className="flex gap-2 mb-4">
-              {["15m", "30m", "45m", "∞"].map((time) => (
+              {[15, 30, 45, "∞"].map((time) => (
                 <Button 
                   key={time}
-                  variant="outline" 
+                  variant={selectedTimer === time ? "default" : "outline"}
                   size="sm"
-                  className="bg-white/20 hover:bg-white/30 text-white border-white/30"
+                  className={selectedTimer === time 
+                    ? "bg-white text-indigo-600" 
+                    : "bg-white/20 hover:bg-white/30 text-white border-white/30"
+                  }
+                  onClick={() => setSelectedTimer(time as number)}
                 >
-                  {time}
+                  {time}m
                 </Button>
               ))}
+            </div>
+            
+            <div className="space-y-3">
+              <div className="flex items-center gap-2">
+                <Volume2 className="h-4 w-4" />
+                <Slider
+                  value={volume}
+                  onValueChange={setVolume}
+                  max={100}
+                  step={1}
+                  className="flex-1"
+                />
+              </div>
             </div>
           </div>
           <div className="absolute -top-10 -right-10 w-40 h-40 bg-white/10 rounded-full" />
@@ -114,9 +155,21 @@ const Sleep = () => {
               <p className="text-muted-foreground text-sm mb-3">
                 Wander through a secret garden under the moonlight, where every step brings deeper tranquility.
               </p>
-              <Button className="w-full bg-lavender hover:bg-lavender/80 text-lavender-dark">
-                <Play className="h-4 w-4 mr-2" />
-                Play Story
+              <Button 
+                className="w-full bg-lavender hover:bg-lavender/80 text-lavender-dark"
+                onClick={() => handlePlayStory("Midnight in the Garden")}
+              >
+                {currentStory === "Midnight in the Garden" && isPlaying ? (
+                  <>
+                    <Pause className="h-4 w-4 mr-2" />
+                    Pause Story
+                  </>
+                ) : (
+                  <>
+                    <Play className="h-4 w-4 mr-2" />
+                    Play Story
+                  </>
+                )}
               </Button>
             </div>
           </Card>
@@ -141,8 +194,17 @@ const Sleep = () => {
                   <div className="flex-1 min-w-0">
                     <div className="flex items-start justify-between mb-1">
                       <h3 className="font-semibold truncate">{story.title}</h3>
-                      <Button size="sm" variant="ghost" className="shrink-0 h-8 w-8 p-0 text-ocean">
-                        <Play className="h-4 w-4" />
+                      <Button 
+                        size="sm" 
+                        variant="ghost" 
+                        className="shrink-0 h-8 w-8 p-0 text-ocean"
+                        onClick={() => handlePlayStory(story.title)}
+                      >
+                        {currentStory === story.title && isPlaying ? (
+                          <Pause className="h-4 w-4" />
+                        ) : (
+                          <Play className="h-4 w-4" />
+                        )}
                       </Button>
                     </div>
                     <p className="text-sm text-muted-foreground mb-1">{story.narrator}</p>
@@ -171,9 +233,23 @@ const Sleep = () => {
                 <div className="text-2xl mb-2">{sound.icon}</div>
                 <h3 className="font-medium text-sm mb-1">{sound.name}</h3>
                 <p className="text-xs text-muted-foreground mb-3">{sound.duration}</p>
-                <Button size="sm" variant="outline" className="w-full text-xs">
-                  <Play className="h-3 w-3 mr-1" />
-                  Play
+                <Button 
+                  size="sm" 
+                  variant="outline" 
+                  className="w-full text-xs"
+                  onClick={() => handlePlaySound(sound.name)}
+                >
+                  {currentStory === sound.name && isPlaying ? (
+                    <>
+                      <Pause className="h-3 w-3 mr-1" />
+                      Pause
+                    </>
+                  ) : (
+                    <>
+                      <Play className="h-3 w-3 mr-1" />
+                      Play
+                    </>
+                  )}  
                 </Button>
               </Card>
             ))}
